@@ -1,13 +1,13 @@
-# tf_unet is free software: you can redistribute it and/or modify
+ tf_unet is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # tf_unet is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with tf_unet.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,7 +34,7 @@ def bias_variable(shape, name="bias"):
 
 def conv2d(x, W, b, keep_prob_):
     with tf.name_scope("conv2d"):
-        conv_2d = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='VALID')
+        conv_2d = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
         conv_2d_b = tf.nn.bias_add(conv_2d, b)
         return tf.nn.dropout(conv_2d_b, keep_prob_)
 
@@ -42,10 +42,10 @@ def deconv2d(x, W,stride):
     with tf.name_scope("deconv2d"):
         x_shape = tf.shape(x)
         output_shape = tf.stack([x_shape[0], x_shape[1]*2, x_shape[2]*2, x_shape[3]//2])
-        return tf.nn.conv2d_transpose(x, W, output_shape, strides=[1, stride, stride, 1], padding='VALID', name="conv2d_transpose")
+        return tf.nn.conv2d_transpose(x, W, output_shape, strides=[1, stride, stride, 1], padding='SAME', name="conv2d_transpose")
 
 def max_pool(x,n):
-    return tf.nn.max_pool(x, ksize=[1, n, n, 1], strides=[1, n, n, 1], padding='VALID')
+    return tf.nn.max_pool(x, ksize=[1, n, n, 1], strides=[1, n, n, 1], padding='SAME')
 
 def crop_and_concat(x1,x2):
     with tf.name_scope("crop_and_concat"):
